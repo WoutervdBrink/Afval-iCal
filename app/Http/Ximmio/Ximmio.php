@@ -24,7 +24,7 @@ class Ximmio
 
         $data = Http::asForm()->post($url, $body)->json();
 
-        Cache::put($key, $data);
+        Cache::put($key, $data, now()->addDay());
 
         return $data;
     }
