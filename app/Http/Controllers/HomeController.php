@@ -35,12 +35,16 @@ class HomeController extends Controller
             [],
         );
 
-        $url = route('ical.render', $calendar);
+        return redirect()
+            ->route('home.show', $calendar);
+    }
 
+    public function show(Calendar $calendar)
+    {
         return view('url', [
-            ...$request->validated(),
-            'address' => $address,
-            'url' => $url,
+            'calendar' => $calendar,
+            'address' => $calendar->address,
+            'url' => route('ical.render', $calendar)
         ]);
     }
 }
