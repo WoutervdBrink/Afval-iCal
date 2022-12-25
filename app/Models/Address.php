@@ -10,6 +10,8 @@ class Address extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
     protected $fillable = [
         'company_code',
         'id',
