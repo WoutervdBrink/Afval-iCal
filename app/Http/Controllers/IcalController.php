@@ -15,6 +15,7 @@ class IcalController extends Controller
     public function render(Calendar $calendar)
     {
         $calendar->touch();
+        $calendar->address->touch();
 
         $address = $calendar->address;
         $company = $address->company;
