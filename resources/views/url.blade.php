@@ -24,6 +24,8 @@
     <label for="url" class="form-label">iCal-URL</label>
     <div class="input-group">
         <input class="form-control" id="url" type="text" readonly="readonly" value="{{ $url }}">
-        <button class="btn btn-primary" type="button">Kopieer</button>
+        <button class="btn btn-primary" type="button" id="url-button">Kopieer</button>
     </div>
+
+    @vite('resources/js/app.js')
 @endsection
