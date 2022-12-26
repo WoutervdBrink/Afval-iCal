@@ -12,8 +12,12 @@
         <div class="col-sm-6 mx-auto">
             <h1 class="text-center mb-4 mt-4">Afval-iCal.nl</h1>
 
-            <div class="bg-white p-4 border shadow">
+            <div class="bg-white p-4 mb-4 border shadow">
                 @yield('content', '')
+            </div>
+
+            <div class="px-4 text-center">
+                <a href="{{ route('privacy') }}">Privacy</a>
             </div>
         </div>
     </div>
