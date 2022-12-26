@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Ximmio\Ximmio;
 use App\Models\Calendar;
+use DateInterval;
 use Eluceo\iCal\Domain\Entity\Event;
+use Eluceo\iCal\Domain\ValueObject\Alarm;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
-use Illuminate\Support\Facades\Cache;
 
 class IcalController extends Controller
 {
@@ -23,29 +24,37 @@ class IcalController extends Controller
         $collection = Ximmio::getCollections($calendar->address);
 
         $ical = new \Eluceo\iCal\Domain\Entity\Calendar();
+        $ical->setPublishedTTL(new DateInterval('P1D'));
 
         foreach ($collection as $col) {
+
             $moment = $col->pickupDate;
 
             if ($calendar->remind_me_on === 'before') {
                 $moment = $moment->subDay();
             }
 
-            $moment->setTimeFromTimeString($calendar->remind_me_at);
+            $moment->setTimeFromTimeString($calendar->remind_me_at->format('H:i'));
 
-            $from = new DateTime($moment, false);
-            $to = new DateTime($moment->addMinutes(10), false);
-
-            $ical->addEvent(
-                (new Event())
-                    ->setSummary(__('calendar.summary', ['type' => __('ximmio.types.' . $col->type)]))
-                    ->setDescription(
-                        __(
+            $from = new DateTime($moment, true);
+            $to = new DateTime($moment->addMinutes(10), true);
+            $summary = __('calendar.summary', ['type' => __('ximmio.types.' . $col->type)]);
+            $description = __(
                             'calendar.description',
                             [
                                 'company' => $company->name,
                                 'date' => now()->format('Y-m-d H:i:s')
                             ]
+                        );
+
+            $ical->addEvent(
+                (new Event())
+                    ->setSummary($summary)
+                    ->setDescription($description)
+                    ->addAlarm(
+                        new Alarm(
+                            new Alarm\DisplayAction($summary),
+                            (new Alarm\RelativeTrigger(DateInterval::createFromDateString('-10 minutes')))->withRelationToEnd()
                         )
                     )
                     ->setOccurrence(new TimeSpan($from, $to))
