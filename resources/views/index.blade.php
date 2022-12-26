@@ -3,6 +3,22 @@
 @section('title', 'Home')
 
 @section('content')
+    <h5>Afval-iCal</h5>
+    <p>Deze website kan voor een beperkt aantal afvalbedrijven een iCal-URL met ophaalmomenten genereren. Je krijgt dan
+    afspraken in je digitale agenda voor alle ophaalmomenten. Door herinneringen in te stellen krijg je meldingen
+    wanneer je een container aan de straat moet zetten:</p>
+
+    <div class="row mb-4">
+        <div class="col-8 mx-auto bg-light shadow-sm p-3 d-flex align-items-center">
+            <img src="{{ asset('img/calendar.svg') }}" class="flex-shrink-0 me-3" style="width: 2em; height: 2em">
+            <div>
+                <h6>Restafval aan de straat zetten</h6>
+            {{ now()->setTime(20, 0)->isoFormat('lll') }}
+            </div>
+        </div>
+    </div>
+
+    <h5>URL genereren</h5>
     <form method="post">
         @csrf
 
@@ -14,7 +30,7 @@
                 @endforeach
             </select>
             <div class="form-text">
-                Selecteer hier het bedrijf verantwoordelijk voor het ophalen van afval in jouw buurt.
+                Selecteer hier het bedrijf dat afval ophaalt in jouw buurt.
             </div>
             @error('company')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -42,7 +58,7 @@
             </div>
         </div>
 
-        <div class="mb-3 row">
+        <div class="mb-4 row">
             <div class="col-sm">
                 <label for="remind_me_on">Herinner mij op</label>
                 <select id="remind_me_on" name="remind_me_on"
@@ -64,7 +80,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary d-block w-100">
             Maak URL
         </button>
     </form>

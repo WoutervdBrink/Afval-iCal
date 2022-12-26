@@ -17,6 +17,7 @@ $input-bg: #fff;
 @import "../node_modules/bootstrap/scss/root";
 
 // 6. Optionally include any other parts as needed
+@import "../node_modules/bootstrap/scss/alert";
 @import "../node_modules/bootstrap/scss/buttons";
 @import "../node_modules/bootstrap/scss/containers";
 @import "../node_modules/bootstrap/scss/forms";
