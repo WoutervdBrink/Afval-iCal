@@ -3,7 +3,7 @@
 @section('title', 'Link')
 
 @section('content')
-    <h5>iCal-URL</h5>
+    <h2>iCal-URL</h2>
     <p>Hieronder vind je de iCal-URL voor de volgende gegevens:</p>
 
     <dl class="row">
@@ -31,7 +31,7 @@
         <button class="btn btn-primary" type="button" id="url-button">Kopieer</button>
     </div>
 
-    <h5>Hoe gebruik ik dit?</h5>
+    <h2>Hoe gebruik ik dit?</h2>
     <p>Kopieer de link hierboven en importeer hem in je agenda. Zorg ervoor dat je zelf herinneringen instelt voor de
     afspraken in de link; deze website kan geen herinneringen voor je instellen.</p>
 

@@ -3,7 +3,7 @@
 @section('title', 'Privacy')
 
 @section('content')
-    <h5>Privacy</h5>
+    <h2>Privacy</h2>
 
     <p>Maak je gebruik van de diensten op deze website, dan is het noodzakelijk dat de volgende persoonsgegevens worden
         verzameld:</p>

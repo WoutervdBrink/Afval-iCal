@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', '') - Afval-iCal.nl</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    <meta name="description" content="Genereer een iCal-URL met ophaalmomenten voor het afval in jouw buurt.">
 </head>
 <body>
 <div class="container">
@@ -17,7 +18,7 @@
             </div>
 
             <div class="px-4 text-center">
-                <a href="{{ route('privacy') }}">Privacy</a>
+                <a href="{{ route('privacy') }}" class="text-dark">Privacy</a>
             </div>
         </div>
     </div>

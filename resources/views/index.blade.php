@@ -3,14 +3,14 @@
 @section('title', 'Home')
 
 @section('content')
-    <h5>Afval-iCal</h5>
+    <h2>Afval-iCal</h2>
     <p>Deze website kan voor een beperkt aantal afvalbedrijven een iCal-URL met ophaalmomenten genereren. Je krijgt dan
     afspraken in je digitale agenda voor alle ophaalmomenten. Door herinneringen in te stellen krijg je meldingen
     wanneer je een container aan de straat moet zetten:</p>
 
     <div class="row mb-4">
         <div class="col-8 mx-auto bg-light shadow-sm p-3 d-flex align-items-center">
-            <img src="{{ asset('img/calendar.svg') }}" class="flex-shrink-0 me-3" style="width: 2em; height: 2em">
+            <img src="{{ asset('img/calendar.svg') }}" class="flex-shrink-0 me-3" style="width: 2em; height: 2em" alt="Agenda-icoon">
             <div>
                 <h6>Restafval aan de straat zetten</h6>
             {{ now()->setTime(20, 0)->isoFormat('lll') }}
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <h5>URL genereren</h5>
+    <h2>URL genereren</h2>
     <form method="post">
         @csrf
 
