@@ -12,7 +12,7 @@
         <div class="col-8 mx-auto bg-light shadow-sm p-3 d-flex align-items-center">
             <img src="{{ asset('img/calendar.svg') }}" class="flex-shrink-0 me-3" style="width: 2em; height: 2em" alt="Agenda-icoon">
             <div>
-                <h6>Restafval aan de straat zetten</h6>
+                Restafval aan de straat zetten<br>
             {{ now()->setTime(20, 0)->isoFormat('lll') }}
             </div>
         </div>
