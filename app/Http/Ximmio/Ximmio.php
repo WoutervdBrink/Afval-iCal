@@ -75,7 +75,7 @@ class Ximmio
 
         $data = self::getCachedRequest($key, self::ROOT_URL.'GetCalendar', [
             'uniqueAddressID' => $address->id,
-            'startDate' => now()->format('Y-m-d'),
+            'startDate' => now()->subMonth()->format('Y-m-d'),
             'endDate' => now()->addYear()->format('Y-m-d'),
             'companyCode' => $address->company->code,
             'community' => 'Enschede',
