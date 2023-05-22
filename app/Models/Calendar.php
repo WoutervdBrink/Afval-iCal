@@ -18,10 +18,8 @@ class Calendar extends Model
         'remind_me_at',
     ];
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'remind_me_at'
+    protected $casts = [
+        'remind_me_at' => 'datetime'
     ];
 
     public function address(): BelongsTo
