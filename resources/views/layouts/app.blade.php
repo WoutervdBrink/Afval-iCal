@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-sm-6 mx-auto">
+        <div class="col-sm-9 mx-auto">
             <h1 class="text-center mb-4 mt-4">Afval-iCal.nl</h1>
 
             <div class="bg-white p-4 mb-4 border shadow">

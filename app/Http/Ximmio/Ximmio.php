@@ -52,13 +52,13 @@ class Ximmio
             [
                 'company_code' => $companyCode,
                 'street' => $addressData['Street'],
-                'house_number' => sprintf(
+                'house_number' => trim(sprintf(
                     '%s%s%s%s',
                     $addressData['HouseNumber'],
                     $addressData['HouseLetter'],
                     $addressData['HouseNumberAddition'],
                     $addressData['HouseNumberIndication'],
-                ),
+                )),
                 'postal_code' => preg_replace('/[^A-Z0-9]/', '', Str::upper($addressData['ZipCode'])),
                 'city' => $addressData['City']
             ]
