@@ -6,9 +6,9 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "bootstrap": "^5.2.3",
-        "laravel-vite-plugin": "^0.7.5",
+        "bootstrap": "^5.3",
+        "laravel-vite-plugin": "^1.0",
         "sass": "^1.62.1",
-        "vite": "^4.0.0"
+        "vite": "^5.0"
     }
 }
