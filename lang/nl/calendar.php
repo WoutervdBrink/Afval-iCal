@@ -5,6 +5,6 @@ return [
     'description' => "Data afkomstig uit de :company afvalkalender.\n\nLaatst bijgewerkt: :date",
     'remind_me_on' => [
         'before' => 'De dag ervoor',
-        'same' => 'De dag zelf'
+        'at' => 'De dag zelf'
     ]
 ];

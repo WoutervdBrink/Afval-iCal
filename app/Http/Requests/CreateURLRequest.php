@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreateCalendarRequest extends FormRequest
+class CreateURLRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,8 +29,7 @@ class CreateCalendarRequest extends FormRequest
             'postal_code' => ['required', 'string', 'regex:/[0-9]{4} ?[A-Z]{2}/'],
             'house_number' => ['required', 'string'],
             'remind_me_on' => ['required', Rule::in(['before', 'same'])],
-            'remind_me_at' => ['required', 'date_format:H:i'],
-            'pushover_key' => ['nullable', 'regex:/[A-Za-z0-9]{30}/'],
+            'remind_me_at' => ['required', 'date_format:H:i']
         ];
     }
 }

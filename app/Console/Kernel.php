@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('calendars:flush')->daily();
-        $schedule->command('calendars:notify')->everyFiveMinutes();
 
         $schedule->command('cache:prune-stale-tags')->hourly();
     }

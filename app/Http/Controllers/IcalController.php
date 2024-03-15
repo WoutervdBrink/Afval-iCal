@@ -27,6 +27,7 @@ class IcalController extends Controller
         $ical->setPublishedTTL(new DateInterval('P1D'));
 
         foreach ($collection as $col) {
+
             $moment = $col->pickupDate;
 
             if ($calendar->remind_me_on === 'before') {

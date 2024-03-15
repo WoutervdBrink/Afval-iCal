@@ -31,8 +31,4 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'pushover' => [
-        'token' => env('PUSHOVER_TOKEN'),
-    ],
-
 ];
