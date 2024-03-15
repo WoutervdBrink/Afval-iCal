@@ -1,6 +1,7 @@
 <?php
 
 // @formatter:off
+// phpcs:ignoreFile
 /**
  * A helper file for your Eloquent Models
  * Copy the phpDocs from this file to the correct Model,
@@ -12,7 +13,7 @@
 
 namespace App\Models{
 /**
- * App\Models\Address
+ * 
  *
  * @property string $company_code
  * @property int $id
@@ -40,7 +41,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Calendar
+ * 
  *
  * @property string $id
  * @property int $address_id
@@ -49,8 +50,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Address $address
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read int|null $notifications_count
  * @method static \Illuminate\Database\Eloquent\Builder|Calendar newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Calendar newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Calendar query()
@@ -66,7 +65,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Company
+ * 
  *
  * @property string $code
  * @property string $name
