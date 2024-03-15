@@ -36,5 +36,5 @@
     <p>Kopieer de link hierboven en importeer hem in je agenda. Zorg ervoor dat je zelf herinneringen instelt voor de
     afspraken in de link; deze website kan geen herinneringen voor je instellen.</p>
 
-    @vite('resources/js/app.js')
+    @vite('resources/js/url.js')
 @endsection

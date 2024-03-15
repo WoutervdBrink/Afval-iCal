@@ -14,7 +14,11 @@
                  alt="Agenda-icoon">
             <div>
                 Restafval aan de straat zetten<br>
-                {{ now()->setTime(20, 0)->isoFormat('lll') }}
+                <span id="example_time">
+                    {{ now()->setTime(20, 0)->subDay()->isoFormat('lll') }}
+                    -
+                    {{ now()->subDay()->setTime(22, 0)->format('H:i') }}
+                </span>
             </div>
         </div>
     </div>
@@ -27,7 +31,11 @@
             <label for="company" class="form-label">Afvalbedrijf</label>
             <select id="company" name="company" class="form-select @error('postal_code') is-invalid @enderror">
                 @foreach($companies as $company)
-                    <option value="{{ $company->code }}">{{ $company->name }}</option>
+                    <option
+                        value="{{ $company->code }}"
+                        @if(old('company') === $company->code) selected="selected" @endif>
+                        {{ $company->name }}
+                    </option>
                 @endforeach
             </select>
             <div class="form-text">
@@ -42,7 +50,7 @@
             <div class="col-sm">
                 <label for="postal_code" class="form-label">Postcode</label>
                 <input class="form-control @error('postal_code') is-invalid @enderror" id="postal_code"
-                       name="postal_code" placeholder="1234AB"
+                       name="postal_code" placeholder="1234AB" value="{{ old('postal_code') }}"
                        type="text">
                 @error('postal_code')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -51,7 +59,7 @@
             <div class="col-sm">
                 <label for="house_number" class="form-label">Huisnummer</label>
                 <input class="form-control @error('house_number') is-invalid @enderror" id="house_number"
-                       name="house_number" placeholder="5"
+                       name="house_number" placeholder="5" value="{{ old('house_number') }}"
                        type="text">
                 @error('house_number')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -64,8 +72,13 @@
                 <label for="remind_me_on">Herinner mij op</label>
                 <select id="remind_me_on" name="remind_me_on"
                         class="form-select @error('remind_me_on') is-invalid @enderror">
-                    <option value="before">De dag ervoor</option>
-                    <option value="same">De dag zelf</option>
+                    @foreach(['before', 'same'] as $option)
+                        <option
+                            value="{{ $option }}"
+                            @if(old('remind_me_on') === $option) selected="selected" @endif>
+                            {{ __('calendar.remind_me_on.'.$option) }}
+                        </option>
+                    @endforeach
                 </select>
                 @error('remind_me_on')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -74,7 +87,7 @@
             <div class="col-sm">
                 <label for="remind_me_at">Om</label>
                 <input id="remind_me_at" name="remind_me_at"
-                       class="form-select @error('remind_me_at') is-invalid @enderror" type="time" value="20:00">
+                       class="form-select @error('remind_me_at') is-invalid @enderror" type="time" value="{{ old('remind_me_at', '20:00') }}">
                 @error('remind_me_at')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -86,7 +99,7 @@
             <div class="input-group has-validation">
                 <input class="form-control @error('duration') is-invalid @enderror" id="duration"
                        name="duration" placeholder="120"
-                       min="10" max="240" step="5" value="120"
+                       min="10" max="240" step="5" value="{{ old('duration', 120) }}"
                        type="number">
                 <span class="input-group-text">minuten</span>
                 @error('duration')
@@ -99,4 +112,6 @@
             Maak URL
         </button>
     </form>
+
+    @vite('resources/js/form.js')
 @endsection
