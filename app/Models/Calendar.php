@@ -14,6 +14,7 @@ class Calendar extends Model
 
     protected $fillable = [
         'address_id',
+        'duration',
         'remind_me_on',
         'remind_me_at',
     ];

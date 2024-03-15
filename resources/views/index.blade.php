@@ -5,15 +5,16 @@
 @section('content')
     <h2>Afval-iCal</h2>
     <p>Deze website kan voor een beperkt aantal afvalbedrijven een iCal-URL met ophaalmomenten genereren. Je krijgt dan
-    afspraken in je digitale agenda voor alle ophaalmomenten. Door herinneringen in te stellen krijg je meldingen
-    wanneer je een container aan de straat moet zetten:</p>
+        afspraken in je digitale agenda voor alle ophaalmomenten. Door herinneringen in te stellen krijg je meldingen
+        wanneer je een container aan de straat moet zetten:</p>
 
     <div class="row mb-4">
         <div class="col-8 mx-auto bg-light shadow-sm p-3 d-flex align-items-center">
-            <img src="{{ asset('img/calendar.svg') }}" class="flex-shrink-0 me-3" style="width: 2em; height: 2em" alt="Agenda-icoon">
+            <img src="{{ asset('img/calendar.svg') }}" class="flex-shrink-0 me-3" style="width: 2em; height: 2em"
+                 alt="Agenda-icoon">
             <div>
                 Restafval aan de straat zetten<br>
-            {{ now()->setTime(20, 0)->isoFormat('lll') }}
+                {{ now()->setTime(20, 0)->isoFormat('lll') }}
             </div>
         </div>
     </div>
@@ -33,7 +34,7 @@
                 Selecteer hier het bedrijf dat afval ophaalt in jouw buurt.
             </div>
             @error('company')
-                <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
@@ -58,7 +59,7 @@
             </div>
         </div>
 
-        <div class="mb-4 row">
+        <div class="mb-3 row">
             <div class="col-sm">
                 <label for="remind_me_on">Herinner mij op</label>
                 <select id="remind_me_on" name="remind_me_on"
@@ -75,6 +76,20 @@
                 <input id="remind_me_at" name="remind_me_at"
                        class="form-select @error('remind_me_at') is-invalid @enderror" type="time" value="20:00">
                 @error('remind_me_at')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="duration" class="form-label">Duur van agenda-item</label>
+            <div class="input-group has-validation">
+                <input class="form-control @error('duration') is-invalid @enderror" id="duration"
+                       name="duration" placeholder="120"
+                       min="10" max="240" step="5" value="120"
+                       type="number">
+                <span class="input-group-text">minuten</span>
+                @error('duration')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

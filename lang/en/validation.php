@@ -153,9 +153,7 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+        'divisible' => ':Attribute must be divisible by :by.'
     ],
 
     /*

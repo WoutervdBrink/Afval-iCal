@@ -37,7 +37,7 @@ class IcalController extends Controller
             $moment->setTimeFromTimeString($calendar->remind_me_at->format('H:i'));
 
             $from = new DateTime($moment, true);
-            $to = new DateTime($moment->addHours(2), true);
+            $to = new DateTime($moment->addMinutes($calendar->duration), true);
             $summary = __('calendar.summary', ['type' => __('ximmio.types.' . $col->type)]);
             $description = __(
                             'calendar.description',

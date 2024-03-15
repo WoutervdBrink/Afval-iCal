@@ -31,6 +31,7 @@ class HomeController extends Controller
                 'address_id' => $address->id,
                 'remind_me_on' => $request->validated('remind_me_on'),
                 'remind_me_at' => $request->validated('remind_me_at'),
+                'duration' => $request->validated('duration'),
             ],
             [],
         );

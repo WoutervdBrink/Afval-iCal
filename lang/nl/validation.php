@@ -126,9 +126,7 @@ return [
     |
     */
     'custom'               => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+        'divisible' => ':Attribute moet deelbaar zijn door :by.'
     ],
     /*
     |--------------------------------------------------------------------------

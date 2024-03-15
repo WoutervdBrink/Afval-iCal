@@ -21,7 +21,8 @@
             {{ __('calendar.remind_me_on.'.$calendar->remind_me_on) }}, om
             <time datetime="{{ $calendar->remind_me_at->toTimeString() }}">
                 {{ $calendar->remind_me_at->format('H:i') }}
-            </time>
+            </time><br>
+            Agenda-item eindigt na {{ $calendar->duration }} minuten
         </dd>
     </dl>
 
