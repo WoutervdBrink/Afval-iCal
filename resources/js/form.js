@@ -21,7 +21,7 @@ const dateToTime = (d) => `${pz(d.getHours())}:${pz(d.getMinutes())}`;
         }
 
         const end = new Date(start);
-        end.setMinutes(start.getMinutes() + durationInput.value);
+        end.setMinutes(start.getMinutes() + parseInt(durationInput.value));
 
         if (dayInput.value === 'before') {
             start.setDate(start.getDate() - 1);
