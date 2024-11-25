@@ -1,104 +1,157 @@
 <?php
 
-namespace App\Http\Ximmio;
+namespace App\Ximmio;
 
-use App\Enums\CollectionType;
-use App\Models\Address;
-use App\Models\Company;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
+use App\Ximmio\Models\Address;
+use App\Ximmio\Models\Collection;
+use App\Ximmio\Models\WasteType;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\HttpClientException;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use RuntimeException;
 
 class Ximmio
 {
     const ROOT_URL = 'https://wasteapi.ximmio.com/api/';
 
-    private static function getCachedRequest(string $key, string $url, array $body): array
+    /**
+     * Perform a request to the Ximmio API.
+     *
+     * @param string $method The method to call.
+     * @param array $body Optional arguments for the request.
+     * @throws RequestException if the request failed.
+     * @throws ConnectionException if the request failed.
+     */
+    private static function request(string $method, array $body = []): array
     {
-        $key = 'ximmio/http/'.$key.'/v1';
+        $response = Http::asForm()
+            ->post(self::ROOT_URL . $method, $body);
 
-        if (Cache::has($key)) {
-            return Cache::get($key);
-        }
+        $response->throw();
 
-        $data = Http::asForm()->post($url, $body)->json();
-
-        Cache::put($key, $data, now()->addDay());
-
-        return $data;
+        return $response->json();
     }
 
-    public static function getAddress(Company $company, string $postalCode, string $houseNumber): Address
+    /**
+     * Validate a Ximmio API response.
+     *
+     * @param array $body Data returned by the request.
+     * @param array $rules Rules to validate the request data against.
+     * @return void
+     */
+    private static function validate(array $body = [], array $rules = []): void
     {
-        $companyCode = $company->code;
+        $validator = Validator::make($body, $rules);
 
-        $key = sha1(sprintf('getAddress/%s/%s/%s', $company->name, $postalCode, $houseNumber));
+        if ($validator->fails()) {
+            throw new RuntimeException('Invalid API response data: ' . $validator->errors()->first());
+        }
+    }
 
-        $data = self::getCachedRequest($key, self::ROOT_URL . 'FetchAdress', [
+    /**
+     * Search for an address in the Ximmio database.
+     *
+     * @param string $companyCode Code of the company to query addresses for.
+     * @param string $postalCode Postal code of the address.
+     * @param string $houseNumber House number of the address.
+     * @return ?Address The address with the specified parameters, if any was found.
+     * @throws HttpClientException if the request fails.
+     */
+    public static function getAddress(string $companyCode, string $postalCode, string $houseNumber): ?Address
+    {
+        $data = self::request('FetchAdress', [
             'postCode' => $postalCode,
             'houseNumber' => $houseNumber,
             'companyCode' => $companyCode
         ]);
 
-        if (!isset($data['dataList']) || count($data['dataList']) === 0) {
-            throw new \InvalidArgumentException(__('ximmio.no_address'));
+        if (empty($data['dataList'])) {
+            return null;
         }
 
-        $addressData = $data['dataList'][0];
+        self::validate($data, [
+            'dataList' => 'array',
+            'dataList.*.UniqueId' => 'required|numeric',
+            'dataList.*.HouseNumber' => 'string',
+            'dataList.*.HouseLetter' => 'string',
+            'dataList.*.HouseNumberAddition' => 'string',
+            'dataList.*.HouseNumberIndication' => 'string',
+            'dataList.*.ZipCode' => 'required|string',
+            'dataList.*.City' => 'required|string',
+        ]);
 
-        return Address::updateOrCreate(
-            ['id' => $addressData['UniqueId']],
-            [
-                'company_code' => $companyCode,
-                'street' => $addressData['Street'],
-                'house_number' => sprintf(
-                    '%s%s%s%s',
-                    $addressData['HouseNumber'],
-                    $addressData['HouseLetter'],
-                    $addressData['HouseNumberAddition'],
-                    $addressData['HouseNumberIndication'],
-                ),
-                'postal_code' => preg_replace('/[^A-Z0-9]/', '', Str::upper($addressData['ZipCode'])),
-                'city' => $addressData['City']
-            ]
-        );
+        return Address::fromData($companyCode, $data['dataList'][0]);
     }
 
     /**
-     * @param Address $address
-     * @return array<Collection>
+     * Query the Ximmio API for collection moments for the specified address.
+     *
+     * @param string $companyCode The code of the company to query collection moments for.
+     * @param int $addressId The unique identifier of the address to query collections for.
+     * @return array<Collection> The collections found for the specified address.
+     * @throws HttpClientException if the request fails.
      */
-    public static function getCollections(Address $address): array
+    public static function getCollections(string $companyCode, int $addressId): array
     {
-        $key = sprintf('getCollections/%d', $address->id);
-
-        $data = self::getCachedRequest($key, self::ROOT_URL.'GetCalendar', [
-            'uniqueAddressID' => $address->id,
+        $data = self::request('GetCalendar', [
+            'uniqueAddressId' => $addressId,
             'startDate' => now()->subMonth()->format('Y-m-d'),
             'endDate' => now()->addYear()->format('Y-m-d'),
-            'companyCode' => $address->company->code,
-            'community' => 'Enschede',
+            'companyCode' => $companyCode,
         ]);
 
-        if (!isset($data['dataList'])) {
+        if (is_null($data['dataList'])) {
             return [];
         }
 
-        $collectionsData = $data['dataList'];
+        self::validate($data, [
+            'dataList' => 'array',
+            'dataList.*.pickupDates' => 'required|array',
+            'dataList.*.pickupDates.*' => 'string|date_format:Y-m-d\TH:i:s',
+            'dataList.*._pickupTypeText' => 'required|string',
+        ]);
+
         $collections = [];
 
-        foreach ($collectionsData as $collectionData) {
+        foreach ($data['dataList'] as $collectionData) {
             $type = $collectionData['_pickupTypeText'];
 
             foreach ($collectionData['pickupDates'] as $pickupDate) {
-                $collections[] = new Collection(
-                    new Carbon($pickupDate),
-                    $type
-                );
+                $collections[] = new Collection($type, Carbon::parse($pickupDate));
             }
         }
 
         return $collections;
+    }
+
+    /**
+     * Get the waste types processed by the specified company.
+     *
+     * @param string $companyCode The company to query waste types for.
+     * @return array<WasteType> The waste types found for the specified company.
+     * @throws HttpClientException if the request fails.
+     */
+    public static function getWasteTypes(string $companyCode): array
+    {
+        $data = self::request('GetConfigOption', [
+            'companyCode' => $companyCode,
+            'configName' => 'ALL',
+        ]);
+
+        if (is_null($data['dataList'])) {
+            return [];
+        }
+
+        self::validate($data, [
+            'dataList' => 'array',
+            'dataList.*.ConfigName' => 'sometimes|string',
+            'dataList.*.Configurations.wasteName' => 'sometimes|string',
+            'dataList.*.Configurations.containerNameName' => 'sometimes|string',
+        ]);
+
+        return array_map(fn (array $data): WasteType => WasteType::fromData($companyCode, $data), $data['dataList']);
     }
 }

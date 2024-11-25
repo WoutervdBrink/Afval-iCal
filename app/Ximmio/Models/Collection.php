@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Ximmio;
+namespace App\Ximmio\Models;
 
 use Carbon\Carbon;
 
-class Collection
+readonly class Collection
 {
     public function __construct(
-        public readonly Carbon $pickupDate,
-        public readonly string $type
+        public string $type,
+        public Carbon $pickupDate,
     )
     {
     }

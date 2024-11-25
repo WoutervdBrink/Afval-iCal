@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Ximmio\Ximmio;
 use App\Models\Calendar;
+use App\Models\WasteType;
+use App\Ximmio\Ximmio;
 use DateInterval;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\Alarm;
@@ -22,7 +23,7 @@ class IcalController extends Controller
         $address = $calendar->address;
         $company = $address->company;
 
-        $collection = Ximmio::getCollections($calendar->address);
+        $collection = Ximmio::getCollections($company->code, $address->id);
 
         $ical = new \Eluceo\iCal\Domain\Entity\Calendar();
         $ical->setPublishedTTL(new DateInterval('P1D'));
@@ -39,7 +40,11 @@ class IcalController extends Controller
 
             $from = new DateTime($moment, true);
             $to = new DateTime($moment->addMinutes($calendar->duration), true);
-            $summary = __('calendar.summary', ['type' => __('ximmio.types.' . $col->type)]);
+
+            $wasteType = $company->wasteTypes()->where('code', $col->type)->first();
+            $type = $wasteType?->name ?? $col->type;
+
+            $summary = __('calendar.summary', ['type' => $type]);
             $description = __(
                             'calendar.description',
                             [
