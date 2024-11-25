@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'no_address' => 'Dit adres wordt hier herkend door dit afvalbedrijf.',
+    'no_address' => 'Dit adres wordt niet herkend door dit afvalbedrijf.',
     'types' => [
         'BRANCHES' => 'takken',
         'BULKLITTER' => 'grofvuil',
