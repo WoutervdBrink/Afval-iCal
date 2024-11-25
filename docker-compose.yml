@@ -25,7 +25,6 @@ services:
             - mysql
             - redis
     mysql:
-        hostname: afval-ical-mysql
         image: 'mysql/mysql-server:8.0'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -45,7 +44,6 @@ services:
             retries: 3
             timeout: 5s
     redis:
-        hostname: afval-ical-redis
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'

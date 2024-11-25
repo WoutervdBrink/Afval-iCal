@@ -10,10 +10,11 @@ use Eluceo\iCal\Domain\ValueObject\Alarm;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
+use Illuminate\Http\Response;
 
 class IcalController extends Controller
 {
-    public function render(Calendar $calendar)
+    public function __invoke(Calendar $calendar): Response
     {
         $calendar->touch();
         $calendar->address->touch();
